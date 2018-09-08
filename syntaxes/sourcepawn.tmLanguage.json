@@ -27,13 +27,16 @@
 			}
 		},
 		{
-			"match": "(\\#define)\\s([^ ]*)",
+			"match": "(\\#define)\\s*([^ ]*)[\"](.+)[\"]",
 			"name": "meta.define.sourcepawn",
 			"captures": {
 				"1": {
 					"name": "keyword.other.sourcepawn"
 				},
 				"2": {
+					"name": "support.constant.core.sourcepawn"
+				},
+				"3": {
 					"name": "support.constant.core.sourcepawn"
 				}
 			}
