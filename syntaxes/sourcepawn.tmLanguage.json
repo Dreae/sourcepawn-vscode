@@ -26,7 +26,7 @@
 			}
 		},
 		{
-			"match": "(\\#define)\\s([^ ]*)",
+			"match": "(\\#define)\\s*([A-Z0-9_]*)\\s*((\"[.]*\")|(-?[0-9.]*))",
 			"name": "meta.define.sourcepawn",
 			"captures": {
 				"1": {
@@ -34,6 +34,12 @@
 				},
 				"2": {
 					"name": "support.constant.core.sourcepawn"
+				},
+				"4": {
+					"name": "string.sourcepawn"
+				},
+				"5": {
+					"name": "constant.numeric.sourcepawn"
 				}
 			}
 		},
