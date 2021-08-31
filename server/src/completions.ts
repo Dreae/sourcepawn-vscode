@@ -241,7 +241,7 @@ export class CompletionRepository {
     get_all_completions(file: string): Completion[] {
         let completions = this.completions.get(file);
 
-        let includes = new Set();
+        let includes: Set<string> = new Set();
         this.get_included_files(completions, includes);
 
         return [...includes].map((file) => {
