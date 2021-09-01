@@ -26,6 +26,6 @@ jobs:
     - name: Archive production artifacts
       uses: actions/upload-artifact@v2
       with:
-        name: latest
+        name: sourcepawn-vscode-${{github.sha}}.vsix
         path: |
           *.vsix
