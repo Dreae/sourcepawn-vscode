@@ -21,7 +21,6 @@ jobs:
     - name: Build
       run: |
         npm i
-        cd server && npm i
         npm i vsce
         npx vsce package
     - name: Archive production artifacts
