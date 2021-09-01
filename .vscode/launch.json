@@ -9,7 +9,7 @@
             "runtimeExecutable": "${execPath}",
             "args": ["--extensionDevelopmentPath=${workspaceRoot}" ],
 			"sourceMaps": true,
-            "outFiles": [ "${workspaceRoot}/out/**/*.js" ]
+            "outFiles": [ "${workspaceRoot}/out/index.js" ]
         },
         {
 			"name": "Attach",
@@ -17,7 +17,7 @@
 			"request": "attach",
 			"port": 6009,
 			"sourceMaps": true,
-            "outFiles": [ "${workspaceRoot}/out/server/**/*.js" ]
+            "outFiles": [ "${workspaceRoot}/out/server/server.js" ]
 		}
     ]
 }

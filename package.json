@@ -2,7 +2,7 @@
     "name": "sourcepawn-vscode",
     "displayName": "SourcePawn",
     "description": "SourcePawn highlighting and autocompletion.",
-    "version": "0.1.4",
+    "version": "0.2.0",
     "publisher": "Dreae",
     "main": "out/index",
     "icon": "sm.png",
@@ -64,14 +64,19 @@
     },
     "dependencies": {
         "glob": "^7.1.2",
-        "vscode": "^1.1.4",
-        "vscode-languageclient": "^3.3.0"
+        "vscode-languageclient": "^7.0.0"
     },
     "devDependencies": {
         "@types/node": "^8.0.14",
-        "typescript": "^4.3.5"
+        "ts-loader": "^9.2.5",
+        "typescript": "^4.3.5",
+        "vscode": "^1.1.4",
+        "webpack": "^5.51.1",
+        "webpack-cli": "^4.8.0"
     },
     "scripts": {
-        "pkgvars": "node ./node_modules/vscode/bin/install"
+        "vscode:prepublish": "webpack --mode production",
+        "pkgvars": "node ./node_modules/vscode/bin/install",
+        "compile": "tsc -b"
     }
 }

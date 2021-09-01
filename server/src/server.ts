@@ -1,33 +1,31 @@
 import { 
-    IPCMessageReader, IPCMessageWriter ,IConnection, createConnection,
-    TextDocuments, CompletionItemKind, CompletionItem, TextDocumentSyncKind
-} from "vscode-languageserver";
+    IPCMessageReader, IPCMessageWriter, createConnection,
+    TextDocuments, TextDocumentSyncKind
+} from "vscode-languageserver/node";
 
-import * as glob from 'glob';
-import * as path from 'path';
+import { TextDocument } from 'vscode-languageserver-textdocument';
 
-import { Completion, CompletionRepository } from './completions';
-import { parse_file } from './parser';
+import { CompletionRepository } from './completions';
 
 let connection = createConnection(new IPCMessageReader(process), new IPCMessageWriter(process));
-let documents = new TextDocuments();
-documents.listen(connection);
+let documents = new TextDocuments(TextDocument);
 
 let completions = new CompletionRepository(documents);
 
-let workspaceRoot: string;
-
 connection.onInitialize((params) => {
-    workspaceRoot = params.rootPath;
-
     return {
         capabilities: {
-            textDocumentSync: documents.syncKind,
+            textDocumentSync: TextDocumentSyncKind.Incremental,
             completionProvider: {
                 resolveProvider: false
             },
             signatureHelpProvider: {
                 triggerCharacters: ["("]
+            },
+            workspace: {
+                workspaceFolders: {
+                    supported: false
+                }
             }
         }
     };
@@ -48,4 +46,5 @@ connection.onSignatureHelp((textDocumentPosition) => {
     return completions.get_signature(textDocumentPosition);
 });
 
+documents.listen(connection);
 connection.listen();

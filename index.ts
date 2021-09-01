@@ -1,10 +1,12 @@
-import { ExtensionContext, Disposable, workspace, window, StatusBarAlignment, commands } from 'vscode';
-import { LanguageClient, LanguageClientOptions, SettingMonitor, ServerOptions, TransportKind } from 'vscode-languageclient';
+import { ExtensionContext, workspace, window, commands } from 'vscode';
+import { LanguageClient, LanguageClientOptions, ServerOptions, TransportKind } from 'vscode-languageclient/node';
 import * as glob from 'glob';
 import * as path from 'path';
 
+let client: LanguageClient;
+
 export function activate(context: ExtensionContext) {
-    let serverModule = context.asAbsolutePath("out/server/server.js");
+    let serverModule = context.asAbsolutePath(path.join('out', 'server', 'server.js'));
     let debugOptions = { execArgv: ["--nolazy", "--inspect=6009"] };
    
     glob(path.join(workspace.rootPath || "", "**/include/sourcemod.inc"), (err, files) => {
@@ -29,15 +31,20 @@ export function activate(context: ExtensionContext) {
     };
 
     let clientOptions: LanguageClientOptions = {
-        documentSelector: ['sourcepawn'],
+        documentSelector: [{ language: 'sourcepawn' }],
         synchronize: {
             configurationSection: 'sourcepawnLanguageServer',
             fileEvents: [workspace.createFileSystemWatcher('**/*.sp'), workspace.createFileSystemWatcher('**/*.inc')]
         }
     };
 
-    let client = new LanguageClient('sourcepawnLanguageServer', serverOptions, clientOptions);
-    let disposable = client.start();
+    client = new LanguageClient('SourcePawn Language Server', serverOptions, clientOptions);
+    client.start();
+}
 
-    context.subscriptions.push(disposable);
+export function deactivate(): Thenable<void> | undefined {
+	if (!client) {
+		return undefined;
+	}
+	return client.stop();
 }

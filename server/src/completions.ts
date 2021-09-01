@@ -1,13 +1,15 @@
 import { 
     CompletionItemKind, CompletionItem, TextDocumentPositionParams, SignatureHelp, SignatureInformation, TextDocuments,
     TextDocumentChangeEvent, Files
-} from 'vscode-languageserver';
+} from 'vscode-languageserver/node';
+
+import { TextDocument } from 'vscode-languageserver-textdocument';
 
 import { parse_blob, parse_file } from './parser';
 
 import * as glob from 'glob';
 import * as path from 'path';
-import Uri from 'vscode-uri';
+import { URI as Uri } from 'vscode-uri';
 import * as fs from 'fs';
 
 export interface Completion {
@@ -165,9 +167,9 @@ export class FileCompletions {
 
 export class CompletionRepository {
     completions: Map<string, FileCompletions>;
-    documents: TextDocuments;
+    documents: TextDocuments<TextDocument>;
 
-    constructor(documents: TextDocuments) {
+    constructor(documents: TextDocuments<TextDocument>) {
         this.completions = new Map();
         this.documents = documents;
 
@@ -175,7 +177,7 @@ export class CompletionRepository {
         documents.onDidChangeContent(this.handle_document_change.bind(this));
     }
 
-    handle_document_change(event: TextDocumentChangeEvent) {
+    handle_document_change(event: TextDocumentChangeEvent<TextDocument>) {
         let completions = new FileCompletions(event.document.uri);
         parse_blob(event.document.getText(), completions);
 
